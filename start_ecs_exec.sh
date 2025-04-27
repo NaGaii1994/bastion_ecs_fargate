@@ -2,16 +2,23 @@
 
 set -e
 
+# 引数チェック
+if [ "$#" -ne 2 ]; then
+  echo "Usage: $0 <SUBNET_ID> <SECURITY_GROUP_ID>"
+  exit 1
+fi
+
+SUBNET_ID="$1"
+SECURITY_GROUP_ID="$2"
+
 CLUSTER_NAME=$(terraform output -raw bastion_cluster_name)
-TASK_DEFINITION="$(terraform output -raw bastion_task_family)"
-SUBNET_ID=$(terraform output -raw vpc_related_subnet_id)
-SECURITY_GROUP_ID=$(terraform output -raw vpc_related_security_group_id)
+TASK_DEFINITION=$(terraform output -raw bastion_task_family)
 CONTAINER_NAME="bastion"
 
 # run-taskでFargateタスク起動
 TASK_ARN=$(aws ecs run-task \
-  --cluster ${CLUSTER_NAME} \
-  --task-definition ${TASK_DEFINITION} \
+  --cluster "${CLUSTER_NAME}" \
+  --task-definition "${TASK_DEFINITION}" \
   --launch-type FARGATE \
   --enable-execute-command \
   --network-configuration "awsvpcConfiguration={subnets=[${SUBNET_ID}],securityGroups=[${SECURITY_GROUP_ID}],assignPublicIp=ENABLED}" \

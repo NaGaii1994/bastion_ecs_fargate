@@ -13,11 +13,6 @@ provider "aws" {
   region = "ap-northeast-1"
 }
 
-module "vpc_related" {
-  source = "./modules/vpc-related"
-  count  = var.create_vpc_related_resources ? 1 : 0
-}
-
 module "bastion" {
   source            = "./modules/ecs-bastion"
   name_prefix       = "bastion"
