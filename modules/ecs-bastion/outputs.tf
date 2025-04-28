@@ -17,3 +17,7 @@ output "task_definition_arn" {
 output "task_execution_role_arn" {
   value = aws_iam_role.task_execution_role.arn
 }
+
+output "ecr" {
+  value = "${data.aws_caller_identity.current.account_id}.dkr.ecr.ap-northeast-1.amazonaws.com/${var.name_prefix}-ecr"
+}

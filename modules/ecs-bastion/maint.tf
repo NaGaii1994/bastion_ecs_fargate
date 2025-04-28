@@ -8,6 +8,8 @@ resource "aws_ecs_cluster" "this" {
   }
 }
 
+data "aws_caller_identity" "current" {}
+
 resource "aws_iam_role" "task_execution_role" {
   name = "${var.name_prefix}-task-exec-role"
 
@@ -33,6 +35,10 @@ resource "aws_iam_role_policy_attachment" "ecs_task_execution_role_ssm_policy" {
   policy_arn = "arn:aws:iam::aws:policy/AmazonSSMManagedInstanceCore"
 }
 
+resource "aws_ecr_repository" "ecr" {
+  name = "${var.name_prefix}-ecr"
+}
+
 resource "aws_ecs_task_definition" "this" {
   family                   = var.task_family
   requires_compatibilities = ["FARGATE"]
@@ -45,7 +51,7 @@ resource "aws_ecs_task_definition" "this" {
   container_definitions = jsonencode([
     {
       name      = "bastion"
-      image     = var.container_image
+      image     = "${data.aws_caller_identity.current.account_id}.dkr.ecr.ap-northeast-1.amazonaws.com/${var.name_prefix}-ecr:latest"
       essential = true
       command   = var.container_command
     }

@@ -13,11 +13,14 @@ provider "aws" {
   region = "ap-northeast-1"
 }
 
+data "aws_caller_identity" "current" {}
+
+data "aws_region" "current" {}
+
 module "bastion" {
   source            = "./modules/ecs-bastion"
   name_prefix       = "bastion"
   cluster_name      = "bastion-cluster"
   task_family       = "bastion-task"
-  container_image   = "amazonlinux:2"
   container_command = ["sleep", "3600"]
 }

@@ -25,11 +25,6 @@ variable "memory" {
   default     = "512"
 }
 
-variable "container_image" {
-  description = "Container image to run"
-  type        = string
-}
-
 variable "container_command" {
   description = "Command to run inside container"
   type        = list(string)
