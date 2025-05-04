@@ -10,7 +10,7 @@ resource "aws_ecs_cluster" "this" {
 
 data "aws_caller_identity" "current" {}
 
-resource "aws_iam_role" "task_execution_role" {
+resource "aws_iam_role" "this" {
   name = "${var.name_prefix}-task-exec-role"
 
   assume_role_policy = jsonencode({
@@ -26,16 +26,16 @@ resource "aws_iam_role" "task_execution_role" {
 }
 
 resource "aws_iam_role_policy_attachment" "task_execution_attach" {
-  role       = aws_iam_role.task_execution_role.name
+  role       = aws_iam_role.this.name
   policy_arn = "arn:aws:iam::aws:policy/service-role/AmazonECSTaskExecutionRolePolicy"
 }
 
 resource "aws_iam_role_policy_attachment" "ecs_task_execution_role_ssm_policy" {
-  role       = aws_iam_role.task_execution_role.name
+  role       = aws_iam_role.this.name
   policy_arn = "arn:aws:iam::aws:policy/AmazonSSMManagedInstanceCore"
 }
 
-resource "aws_ecr_repository" "ecr" {
+resource "aws_ecr_repository" "this" {
   name = "${var.name_prefix}-ecr"
 }
 
@@ -45,8 +45,8 @@ resource "aws_ecs_task_definition" "this" {
   network_mode             = "awsvpc"
   cpu                      = var.cpu
   memory                   = var.memory
-  execution_role_arn       = aws_iam_role.task_execution_role.arn
-  task_role_arn            = aws_iam_role.task_execution_role.arn
+  execution_role_arn       = aws_iam_role.this.arn
+  task_role_arn            = aws_iam_role.this.arn
 
   container_definitions = jsonencode([
     {

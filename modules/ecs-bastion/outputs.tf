@@ -15,7 +15,7 @@ output "task_definition_arn" {
 }
 
 output "task_execution_role_arn" {
-  value = aws_iam_role.task_execution_role.arn
+  value = aws_iam_role.this.arn
 }
 
 output "ecr" {

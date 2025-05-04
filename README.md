@@ -10,10 +10,10 @@ ECS Fargateを使用したサーバーレスな踏み台サーバーをTerraform
 
 | モジュール | リソースタイプ                         | リソース名                                 | 説明                                               |
 |:-----------|:---------------------------------------|:-------------------------------------------|:---------------------------------------------------|
-| bastion    | aws_ecr_repository                     | ecr                                        | ECRリポジトリ (bastion用)                          |
+| bastion    | aws_ecr_repository                     | this                                       | ECRリポジトリ (bastion用)                          |
 | bastion    | aws_ecs_cluster                        | this                                       | ECSクラスター (bastion-cluster)                    |
 | bastion    | aws_ecs_task_definition                | this                                       | ECSタスク定義 (bastion-task)                       |
-| bastion    | aws_iam_role                           | task_execution_role                        | ECSタスク実行用IAMロール (bastion-task-exec-role)   |
+| bastion    | aws_iam_role                           | this                                       | ECSタスク実行用IAMロール (bastion-task-exec-role)   |
 | bastion    | aws_iam_role_policy_attachment         | ecs_task_execution_role_ssm_policy         | SSM管理ポリシーをIAMロールにアタッチ               |
 | bastion    | aws_iam_role_policy_attachment         | task_execution_attach                     | ECSタスク実行ロールポリシーをIAMロールにアタッチ    |
 
